@@ -19,15 +19,14 @@ from ..serializers import (
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
-@api_view(['POST']) # http method the client == POST
-# @authentication_classes([SessionAuthentication, MyCustomAuth])
+@api_view(['POST']) 
 @permission_classes([IsAuthenticated]) # REST API course
 def tweet_create_view(request, *args, **kwargs):
     serializer = TweetCreateSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
         return Response(serializer.data, status=201)
-    return Response({}, status=400)
+    return Response({"message":"Invalid post"}, status=400)
 
 @api_view(['GET'])
 def tweet_detail_view(request, tweet_id, *args, **kwargs):
